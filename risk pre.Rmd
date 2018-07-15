@@ -5,7 +5,7 @@ output: html_document
 initiate the condition of three countries and their risk transporting mechnism
 ```{r setup, include=FALSE}
 pollutiontrans=matrix(data=c(1,1.5,2,0,1,1.5,0,0,1),nrow=3)
-financialtrans=matrix(c(1,0.75,0.5,0.75,1,0.75,0.5,0.75,1),nrow=3)
+financialtrans=matrix(c(1,0.9,0.8,0.9,1,0.9,0.8,0.9,1),nrow=3)
 S0=matrix(c(3000,500,1000,2000,2500,3000),nrow=2)
 rownames(S0)=c("evironment resurces","financial resources")
 colnames(S0)=c("A","B","C")
@@ -23,7 +23,7 @@ counter=matrix(0,nrow = 2,ncol = 3)
 rownames(counter)=c("evironment disaster","financial crisis")
 colnames(counter)=c("A","B","C")
 ```
-initiate the results:
+initiate choices:
 ```{r}
 trying=function(x){
   n=nrow(x)
@@ -32,9 +32,9 @@ trying=function(x){
   return(ifelse(lucky-x>0,0,1))
 }
 disaster=function(states){
-  penv=300/states[1,]
-  pfin=150/states[2,]
-  answer=-0.1*trying(rbind(penv,pfin))
+  penv=250/states[1,]
+  pfin=250/states[2,]
+  answer=-0.15*trying(rbind(penv,pfin))
   return(states*answer)
 }
 #return the profits and pollution
@@ -75,9 +75,9 @@ envimporve=function(actor,x) {
   return(rbind(pollutes,profits))
 }
 
-```
-Action and display function function: 0 for in action, 1 for investing industry, 2 for investing existed technology, 3 for investing new technology, 4 for investing environment. 
-```{r}
+
+#Action and display function function: 0 for in action, 1 for investing industry, 2 for investing existed technology, 3 for investing new technology, 4 for investing environment. 
+
 Actions=function(choosing){
   case=as.matrix(tail(H,1)[[1]])
   result=disaster(case)
@@ -97,7 +97,8 @@ Actions=function(choosing){
     actions[i,i,choosing[i]]=1
   }
   if(max(actions[,,1])>0){
-    result=result+invest_industry(actions[,,1])
+    tempresult=invest_industry(actions[,,1])
+    result=result+rbind(t(pollutiontrans%*%tempresult[1,]),tempresult[2,])
   }
   if(max(actions[,,2]>0)){
     result=result+invest_technology(actions[,,2])
@@ -128,7 +129,7 @@ midtermreport=function(){
   colnames(finresult)= c("a","b","c")
   plot(envresult$a,type='b',col="firebrick1",xlab = "round",ylab = "env index",ylim = c(0,max(envresult)),main = "change of envrionment index")
   lines(envresult$b,type='b',col="seagreen")
-  lines(envresult$c,type='b',col="cadetblue1")
+  lines(envresult$c,type='b',col="cadetblue3")
   plot(finresult$a,l=,type='b',col="firebrick1",xlab = "round",ylab = "fin index",ylim=c(0,max(finresult)),main = "change of finantial index")
   lines(finresult$b,type='b',col="seagreen")
   lines(finresult$c,type='b',col="cadetblue1")
@@ -163,15 +164,15 @@ finalreport()
 round 1
 
 ```{r}
-Actions(c(0,0,0))
+Actions(c(1,4,0))
 midtermreport()
 ```
 ```{r}
-Actions(c(0,0,0))
+Actions(c(4,4,0))
 midtermreport()
 ```
 ```{r}
-Actions(c(0,0,0))
+Actions(c(2,4,4))
 midtermreport()
 ```
 ```{r}
@@ -207,11 +208,30 @@ finantial_supporting=function(from,to,money){
 }
 ```
 ```{r}
-Actions(c(3,2,1))
-finantial_supporting(c(3,3),c(1,2),c(200,100))
+Actions(c(0,0,0))
+finantial_supporting(c(0,0),c(0,0),c(0,0))
 midtermreport()
 ```
-
+```{r}
+Actions(c(0,0,0))
+finantial_supporting(c(0,0),c(0,0),c(0,0))
+midtermreport()
+```
+```{r}
+Actions(c(0,0,0))
+finantial_supporting(c(0,0),c(0,0),c(0,0))
+midtermreport()
+```
+```{r}
+Actions(c(0,0,0))
+finantial_supporting(c(0,0),c(0,0),c(0,0))
+midtermreport()
+```
+```{r}
+Actions(c(0,0,0))
+finantial_supporting(c(0,0),c(0,0),c(0,0))
+midtermreport()
+```
 ```{r}
 finalreport()
 ```
